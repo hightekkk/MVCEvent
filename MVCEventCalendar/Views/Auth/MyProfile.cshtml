@@ -1,0 +1,11 @@
+﻿@{ 
+    Layout = "/Views/Shared/_Auth.cshtml";
+}
+@{
+    ViewBag.Title = "MyProfile";
+}
+
+<h2>MyProfile</h2>
+
+<h3>Welcome - @(Request.IsAuthenticated ? HttpContext.Current.User.Identity.Name : "Гость")</h3>
+

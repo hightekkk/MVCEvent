@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Page.Title</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    @RenderSection("head", required: false)
+    <style>
+
+        .menu {
+            list-style: none;
+            float: right;
+        }
+
+            .menu li {
+                float: left;
+            }
+
+                .menu li a {
+                    padding: 5px;
+                    margin-right: 2px;
+                    background-color: #f3f3f3;
+                }
+    </style>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <ul class="Menu">
+                    <li>@Html.ActionLink("Главная", "IndexA", "Auth")</li>
+                    <li>@Html.ActionLink("Расписание", "Index", "Home")</li>
+                    <li>
+                        @{ 
+                            if (Request.IsAuthenticated)
+                            {
+                                using (Html.BeginForm("Logout", "MyAccount", FormMethod.Post, new { id = "logoutForm" }))
+                                {
+                                    <a href="javascript:document.getElementById('logoutForm').submit()">Выйти</a>
+                                }
+                            }
+                            else
+                            {
+                                @Html.ActionLink("Логин", "Login", "MyAccount")
+                            }
+                        }
+                    </li>
+                </ul>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav"></ul>
+            </div>
+        </div>
+    </div>
+    
+    <div style="height:1px;clear:both"></div>
+    @RenderBody()
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+
+
+    @*@RenderSection("Scripts", false)*@
+</body>
+</html>

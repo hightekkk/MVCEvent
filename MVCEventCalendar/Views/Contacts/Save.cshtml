@@ -1,0 +1,79 @@
+﻿@model MVCEventCalendar.Contact
+@*@{
+    Layout = null;
+}*@
+@{
+        ViewBag.Title = "Save";
+    }
+
+
+@using (Html.BeginForm("Save", "Contacts", FormMethod.Post, new { role = "form" }))
+{
+@Html.ValidationSummary(true)
+@Html.AntiForgeryToken()
+
+<div class="form-group">
+    @if (Model != null)
+    {
+        @Html.HiddenFor(a => a.ContactId)
+    }
+
+    @*@Html.LabelFor(a => a.ContactPerson)
+        @Html.TextBoxFor(a => a.ContactPerson, new { @class = "form-control" })
+        @Html.ValidationMessageFor(a => a.ContactPerson)*@
+</div>
+<div class="form-group">
+    @*@Html.LabelFor(a => a.ContactNo)
+        @Html.TextBoxFor(a => a.ContactNo, new { @class = "form-control" })
+        @Html.ValidationMessageFor(a => a.ContactNo)*@
+</div>
+<div class="form-group">
+    @Html.LabelFor(a => a.PredmetId)
+    @Html.DropDownListFor(a => a.PredmetId, ViewBag.Predmetis as SelectList, "Select Predmet", new { @class = "form-control" })
+    @Html.ValidationMessageFor(a => a.PredmetId)
+</div>
+<div class="form-group">
+    @Html.LabelFor(a => a.PrepodId)
+    @Html.DropDownListFor(a => a.PrepodId, ViewBag.Prepods as SelectList, "Select Prepod", new { @class = "form-control" })
+    @Html.ValidationMessageFor(a => a.PrepodId)
+</div>
+<button type="submit" class="btn btn-default">Submit</button>
+@*@Html.ActionLink("Back to List", "Index", null, new { @style = "padding-left:50px; font-weight:bold;" })*@
+}
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+            $('#PredmetId').change(function () {
+                var PredmetId = $(this).val();
+                var $prepod = $('#PrepodId');
+                $prepod.empty();
+                $prepod.append($('<option></option>').val('').html('Please Wait...'));
+
+                if (PredmetId == "") {
+                    $prepod.empty();
+                    $prepod.append($('<option></option>').val('').html('Select State'));
+                    return;
+                }
+
+                $.ajax({
+                    url: '/Contacts/GetPrepodList',
+                    type: 'GET',
+                    data: { 'PredmetId': PredmetId },
+                    dataType: 'json',
+                    success: function (d) {
+                        $prepod.empty();
+                        $prepod.append($('<option></option>').val('').html('Select State'));
+                        $.each(d, function (i, val) {
+                            $prepod.append($('<option></option>').val(val.PrepodId).html(val.Prepodavatel));
+                        });
+                    },
+                    error: function () {
+                        alert('Error');
+                    }
+                });
+            });
+        });
+    </script>
+}
